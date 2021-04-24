@@ -1,0 +1,137 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Documentation",
+    "description": "API documentation",
+    "version": "1.0.0",
+    "contact": {
+      "email": "rentalxdeveloper@gmail.com"
+    }
+  },
+  "definitions": {
+    "UserRequest": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" }
+      }
+    },
+    "UserResponse": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "admin": { "type": "boolean", "default": false },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create a user",
+        "description": "Create a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/UserRequest",
+                "example": { "name": "new user", "email": "newuser@gmail.com" }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserResponse"
+                }
+              }
+            }
+          },
+          "400": { "description": "Email already exists" }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary": "List all users",
+        "description": "List all users",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/UserResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "List a specific user",
+        "description": "List a specific user",
+        "parameters": {
+          "name": "user_id",
+          "in": "path",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserResponse"
+                }
+              }
+            }
+          },
+          "404": { "description": "User does not exists" }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Turn a common user into an admin",
+        "description": "Turn a common user into an admin",
+        "parameters": {
+          "name": "user_id",
+          "in": "path",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UserResponse"
+                }
+              }
+            }
+          },
+          "404": { "description": "User does not exists" }
+        }
+      }
+    }
+  }
+}
